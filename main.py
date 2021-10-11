@@ -48,6 +48,34 @@ def get_longest_all_not_prime(lista):
     return rezultat
 
 
+def verificare_elemente_prime(lista):
+    """
+    Verifica daca un sir de numere contine doar numere prime
+    :param lista: o lista de numere intregi
+    :return: True, daca sirul are aceasta proprietate, respectiv False in caz contrar
+    """
+    for i in range(len(lista)):
+        verificare = prim(lista[i])
+        if verificare is False:
+            return False
+    return True
+
+
+def get_longest_all_prime(lista):
+    """
+    Determina cea mai lunga subsecventa de elemente prime dintr-o lista
+    :param lista: o lista de numere intregi
+    :return: o noua lista, ce reprezinta cea mai lunga subsecventa cu aceasta proprietate
+    """
+    rezultat = []
+    for i in range(len(lista)):
+        for j in range(i, len(lista)):
+            verificare = verificare_elemente_prime(lista[i:j + 1])
+            if verificare is True and len(rezultat) < len(lista[i:j + 1]):
+                rezultat = lista[i:j + 1]
+    return rezultat
+
+
 def medie(lista):
     """
     Calculeaza media aritmetica a unui sir de numere
@@ -128,11 +156,24 @@ def test_get_longest_average_below():
     assert get_longest_average_below([20, 30, 50], 100) == [20, 30, 50]
 
 
+def test_verificare_elemente_prime():
+    assert verificare_elemente_prime([1, 2, 3]) is False
+    assert verificare_elemente_prime([4, 6, 8]) is False
+    assert verificare_elemente_prime([2, 4, 6, 8]) is False
+
+
+def test_get_longest_all_prime():
+    assert get_longest_all_prime([4, 6, 8, 2, 5]) == [2, 5]
+    assert get_longest_all_prime([2, 3, 5, 7]) == [2, 3, 5, 7]
+    assert get_longest_all_prime([4, 6, 8, 10]) == []
+
+
 def meniu():
     print("1. Citire date")
     print("2. Toate numerele sunt neprime.")
     print("3. Media numerelor nu depășește o valoare citită.")
-    print("4. Iesire")
+    print("4. Toate numerele sunt prime.")
+    print("5. Iesire")
     merge = True
     lista_de_numere = []
     while merge is True:
@@ -148,6 +189,9 @@ def meniu():
             rezultat = get_longest_average_below(lista_de_numere, k)
             print(rezultat)
         elif optiune == 4:
+            rezultat = get_longest_all_prime(lista_de_numere)
+            print(rezultat)
+        elif optiune == 5:
             merge = False
         else:
             print("Valoare gresita! Incercati din nou!")
@@ -160,6 +204,8 @@ def main():
     test_medie()
     test_verificare_medie_aritmetica()
     test_get_longest_average_below()
+    test_verificare_elemente_prime()
+    test_get_longest_all_prime()
     meniu()
 
 
