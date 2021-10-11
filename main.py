@@ -1,6 +1,3 @@
-from math import pow
-
-
 def citire_lista(lista_de_numere):
     string_citire = input("dati lista de numere separate prin virgula: ")
     valori = string_citire.split(",")
@@ -9,163 +6,146 @@ def citire_lista(lista_de_numere):
     return lista_de_numere
 
 
-def invers(numar):
+def prim(numar):
     """
-    Calculeaza inversul unui numar intreg
+    Verifica daca un numar intreg este prim
     :param numar: o valoare intreaga "numar"
-    :return: o valoare intreaga, ce reprezinta inversul lui "numar"
+    :return: True, daca "numar" este prim, respectiv False in caz contrar
     """
-    oglindit = 0
-    while numar != 0:
-        oglindit = (oglindit * 10) + (numar % 10)
-        numar = numar // 10
-    return oglindit
-
-
-def palindrom(numar):
-    """
-    Verifica daca un numar este palindrom
-    :param numar: o valoare intreaga "numar"
-    :return: True, daca "numar" este palindrom, resprectiv False in caz contrar
-    """
-    oglindit = invers(numar)
-    if oglindit == numar:
-        return True
-    return False
-
-
-def verificare_elemente_palindromice(lista):
-    """
-    Verifica daca un sir de numere contine elemente palindromice
-    :param lista: o lista de numere intregi
-    :return: True, daca sirul are aceasta proprieatare, respectiv False in caz contrar
-    """
-    for i in range(len(lista)):
-        verificare = palindrom(lista[i])
-        if verificare is False:
+    if numar < 2:
+        return False
+    for i in range(2, numar // 2 + 1):
+        if numar % i == 0:
             return False
     return True
 
 
-def get_longest_all_palindromes(lista):
+def verificare_elemente_neprime(lista):
     """
-    Determina cea mai lunga subsecventa de elemente palindromice dintr-o lista
+    Verifica daca un sir de numere contine doar numere neprime
     :param lista: o lista de numere intregi
-    :return: o noua lista, ce reprezinta cea mai lunga subsecventa cu aceasta proprietate
-    """
-    rezultat = []
-    for i in range(len(lista)):
-        for j in range(i, len(lista)):
-            verificare = verificare_elemente_palindromice(lista[i:j + 1])
-            if verificare is True and len(rezultat) < len(lista[i:j + 1]):
-                rezultat = lista[i:j + 1]
-    return rezultat
-
-
-def calcul_putere(numar, k):
-    """
-    Calculeaza radicalul de ordin k a unui numar intreg
-    :param numar: o valoare intreaga
-    :param k: o valoare intreaga
-    :return: True, daca numarul are aceasta proprietate, respectiv False in caz contrar
-    """
-    putere = float(1/k)
-    rezultat = pow(numar, putere)
-    if rezultat == int(rezultat):
-        return True
-    return False
-
-
-def verificare_calcul_putere(lista, k):
-    """
-    Verifica daca intr-un sir de numere toate acetea pot fi scrise ca un numar ridicat la puterea k
-    :param lista: o lista de numere intregi
-    :param k: o valoare intreaga
     :return: True, daca sirul are aceasta proprietate, respectiv False in caz contrar
     """
     for i in range(len(lista)):
-        verificare = calcul_putere(lista[i], k)
-        if verificare is False:
+        verificare = prim(lista[i])
+        if verificare is True:
             return False
     return True
 
 
-def get_longest_powers_of_k(lista, k):
+def get_longest_all_not_prime(lista):
     """
-    Determina cea mai lunga subsecventa de elemente cu partea imtreaga si fractionara egale dintr-o lista
-    :param lista: o lista de numere reale
-    :param k: o valoare intreaga
+    Determina cea mai lunga subsecventa de elemente neprime dintr-o lista
+    :param lista: o lista de numere intregi
     :return: o noua lista, ce reprezinta cea mai lunga subsecventa cu aceasta proprietate
     """
     rezultat = []
     for i in range(len(lista)):
         for j in range(i, len(lista)):
-            verificare = verificare_calcul_putere(lista[i:j + 1], k)
+            verificare = verificare_elemente_neprime(lista[i:j + 1])
             if verificare is True and len(rezultat) < len(lista[i:j + 1]):
                 rezultat = lista[i:j + 1]
     return rezultat
 
 
-def test_imvers():
-    assert invers(25) == 52
-    assert invers(19) == 91
-    assert invers(10) == 1
+def medie(lista):
+    """
+    Calculeaza media aritmetica a unui sir de numere
+    :param lista: o lista de valori intregi
+    :return: o valoare intreaga
+    """
+    suma = 0
+    numar_elemente = 0
+    for i in range(len(lista)):
+        suma = suma + lista[i]
+        numar_elemente = numar_elemente + 1
+    medie_aritmetica = suma / numar_elemente
+    return medie_aritmetica
 
 
-def test_palindrom():
-    assert palindrom(25) is False
-    assert palindrom(9) is True
-    assert palindrom(11) is True
+def verificare_medie_aritmetica(lista, numar):
+    """
+    Verifica daca media aritmetica a umui sir depaseste un intreg
+    param lista: o lista de numere intregi
+    param numar: o valoare inteaga
+    :return: True, daca proprietatea este adevarata, respectiv False in caz contrar
+    """
+    medie_aritmetica = medie(lista)
+    if medie_aritmetica < numar:
+        return True
+    return False
 
 
-def test_verificare_elemente_palindromice():
-    assert verificare_elemente_palindromice([25, 15, 36]) is False
-    assert verificare_elemente_palindromice([4, 9, 5]) is True
-    assert verificare_elemente_palindromice([101, 171, 192]) is False
+def get_longest_average_below(lista, numar):
+    """
+    Determina cea mai lunga subsecventa a umui sir cu proprietatea ca media sa nu depaseste valoarea unui intreg
+    :param lista: o lista de numere intregi
+    :param numar: o valoare intreaga
+    :return: o noua lista, ce reprezinta secventa de lungime maxima cu aceasta proprietate
+    """
+    rezultat = []
+    for i in range(len(lista)):
+        for j in range(i, len(lista)):
+            verificare = verificare_medie_aritmetica(lista[i:j + 1], numar)
+            if verificare is True and len(rezultat) < len(lista[i:j + 1]):
+                rezultat = lista[i:j + 1]
+    return rezultat
 
 
-def test_get_longest_all_palindromes():
-    assert get_longest_all_palindromes([1, 2, 3, 4, 5]) == [1, 2, 3, 4, 5]
-    assert get_longest_all_palindromes([10, 11, 121, 13]) == [11, 121]
-    assert get_longest_all_palindromes([51, 40, 32]) == []
+def test_prim():
+    assert prim(25) is False
+    assert prim(19) is True
+    assert prim(10) is False
 
 
-def test_calcul_putere():
-    assert calcul_putere(8, 2) is False
-    assert calcul_putere(9, 2) is True
-    assert calcul_putere(16, 4) is True
+def test_verificare_elemente_neprime():
+    assert verificare_elemente_neprime([1, 2, 3]) is False
+    assert verificare_elemente_neprime([4, 6, 8]) is True
+    assert verificare_elemente_neprime([2, 4, 6, 8]) is False
 
 
-def test_verificare_calcul_putere():
-    assert verificare_calcul_putere([2, 4, 6, 8], 3) is False
-    assert verificare_calcul_putere([4, 9, 25, 36], 2) is True
-    assert verificare_calcul_putere([2], 2) is False
+def test_get_longest_all_not_prime():
+    assert get_longest_all_not_prime([4, 6, 8, 2, 5]) == [4, 6, 8]
+    assert get_longest_all_not_prime([2, 3, 5, 7]) == []
+    assert get_longest_all_not_prime([4, 6, 8, 10]) == [4, 6, 8, 10]
 
 
-def test_get_longest_powers_of_k():
-    assert get_longest_powers_of_k([4, 25, 9, 10, 11], 2) == [4, 25, 9]
-    assert get_longest_powers_of_k([2, 3, 4, 5], 2) == [4]
-    assert get_longest_powers_of_k([2, 3, 5], 3) == []
+def test_medie():
+    assert medie([1, 2, 3]) == 2
+    assert medie([2, 4]) == 3
+    assert medie([1, 2]) == 1.5
+
+
+def test_verificare_medie_aritmetica():
+    assert verificare_medie_aritmetica([1, 4, 5], 10) is True
+    assert verificare_medie_aritmetica([1, 2, 3], 10) is True
+    assert verificare_medie_aritmetica([17, 19, 10], 10) is False
+
+
+def test_get_longest_average_below():
+    assert get_longest_average_below([1, 2, 3, 4, 5], 10) == [1, 2, 3, 4, 5]
+    assert get_longest_average_below([10, 19, 17], 30) == [10, 19, 17]
+    assert get_longest_average_below([20, 30, 50], 100) == [20, 30, 50]
 
 
 def meniu():
-    print("1. citire date")
-    print("2. toate numerele sunt palindroame.")
-    print("3. toate numerele se pot scrie ca x ** k, k citit, x întreg pozitiv.")
-    print("4. iesire")
+    print("1. Citire date")
+    print("2. Toate numerele sunt neprime.")
+    print("3. Media numerelor nu depășește o valoare citită.")
+    print("4. Iesire")
     merge = True
     lista_de_numere = []
     while merge is True:
-        optiune = int(input("dati o valoare de la 1 la 4: "))
+        optiune = int(input("Dati o valoare de la 1 la 4: "))
         if optiune == 1:
             lista_de_numere = []
             citire_lista(lista_de_numere)
         elif optiune == 2:
-            rezultat = get_longest_all_palindromes(lista_de_numere)
+            rezultat = get_longest_all_not_prime(lista_de_numere)
             print(rezultat)
         elif optiune == 3:
-            k = int(input("dati valoarea lui k: "))
-            rezultat = get_longest_powers_of_k(lista_de_numere, k)
+            k = int(input("Dati numarul: "))
+            rezultat = get_longest_average_below(lista_de_numere, k)
             print(rezultat)
         elif optiune == 4:
             merge = False
@@ -174,13 +154,12 @@ def meniu():
 
 
 def main():
-    test_imvers()
-    test_palindrom()
-    test_verificare_elemente_palindromice()
-    test_get_longest_all_palindromes()
-    test_calcul_putere()
-    test_verificare_calcul_putere()
-    test_get_longest_powers_of_k()
+    test_prim()
+    test_verificare_elemente_neprime()
+    test_get_longest_all_not_prime()
+    test_medie()
+    test_verificare_medie_aritmetica()
+    test_get_longest_average_below()
     meniu()
 
 
